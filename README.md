@@ -33,12 +33,12 @@ Pruebas: `flutter test`
 
 ```
 lib/
-  main.dart               # rutas
-  theme.dart              # colores, degradado, validación de correo
-  widgets/
-    app_input.dart        # Input reutilizable (ojo para contraseñas)
-    app_button.dart       # Botón primario / secundario
-    code_box.dart         # Casilla de código
-    auth_layout.dart      # Fondo con formas decorativas, encabezado y pie
-  screens/                # una pantalla por archivo
+  main.dart                     # rutas de la app
+  screens/                      # una pantalla por archivo
+    login_screen.dart
+    register_screen.dart
+    recover_screen.dart
+    verify_code_screen.dart
+    new_password_screen.dart
+    home_screen.dart
 ```
