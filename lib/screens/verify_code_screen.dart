@@ -46,6 +46,13 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
     setState(() {});
   }
 
+  void _backspaceEmpty(int i) {
+    if (i == 0) return;
+    _controllers[i - 1].clear();
+    _nodes[i - 1].requestFocus();
+    setState(() {});
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -77,6 +84,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
               controller: _controllers[i],
               focusNode: _nodes[i],
               onChanged: (v) => _onChanged(i, v),
+              onBackspaceEmpty: () => _backspaceEmpty(i),
             ),
           ),
         ),

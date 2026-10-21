@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
@@ -20,37 +21,91 @@ class AuthLayout extends StatelessWidget {
           const Positioned(bottom: 90, right: 24, child: _Square(28)),
           const Positioned(top: 60, left: 120, child: _Square(14)),
           SafeArea(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 420),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (onBack != null)
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: IconButton.filledTonal(
-                            onPressed: onBack,
-                            icon: const Icon(
-                              Icons.arrow_back_ios_new,
-                              size: 18,
-                            ),
-                          ),
+            child: Column(
+              children: [
+                // En el celular ya se ve la barra del sistema; en web se dibuja.
+                if (kIsWeb) const _StatusBar(),
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 420),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
                         ),
-                      ...children,
-                    ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (onBack != null)
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: IconButton.filledTonal(
+                                  onPressed: onBack,
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios_new,
+                                    size: 18,
+                                  ),
+                                ),
+                              ),
+                            ...children,
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Barra de estado simulada: hora, señal, wifi y batería.
+class _StatusBar extends StatelessWidget {
+  const _StatusBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<DateTime>(
+      stream: Stream.periodic(
+        const Duration(seconds: 30),
+        (_) => DateTime.now(),
+      ),
+      initialData: DateTime.now(),
+      builder: (context, snap) {
+        final t = snap.data!;
+        final time =
+            '${t.hour.toString().padLeft(2, '0')}:'
+            '${t.minute.toString().padLeft(2, '0')}';
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+          child: Row(
+            children: [
+              Text(
+                time,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.text,
+                ),
+              ),
+              const Spacer(),
+              const Icon(
+                Icons.signal_cellular_alt,
+                size: 16,
+                color: AppColors.text,
+              ),
+              const SizedBox(width: 4),
+              const Icon(Icons.wifi, size: 16, color: AppColors.text),
+              const SizedBox(width: 4),
+              const Icon(Icons.battery_full, size: 16, color: AppColors.text),
+            ],
+          ),
+        );
+      },
     );
   }
 }
